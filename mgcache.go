@@ -1,4 +1,4 @@
-package utils
+package mgcache
 
 import (
 	"github.com/muesli/cache2go"
