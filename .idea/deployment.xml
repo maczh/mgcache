@@ -9,7 +9,21 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="测试 (project level)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/opt/go/src/github.com/maczh/mgcache" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="生产">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/opt/go/src/github.com/maczh/mgcache" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="生产 (project level)">
         <serverdata>
           <mappings>
             <mapping deploy="/opt/go/src/github.com/maczh/mgcache" local="$PROJECT_DIR$" web="/" />

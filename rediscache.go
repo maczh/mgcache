@@ -2,7 +2,7 @@ package mgcache
 
 import (
 	jsoniter "github.com/json-iterator/go"
-	config "github.com/maczh/mgconfig"
+	"github.com/maczh/mgconfig"
 	"strings"
 	"time"
 )
@@ -10,27 +10,47 @@ import (
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func PutCache(cacheName, cacheKey string, value interface{}, ttl time.Duration) {
-	config.Redis.Set(cacheName+":"+cacheKey, toJSON(value), ttl)
+	redis,err := mgconfig.GetRedisConnection()
+	if err != nil {
+		return
+	}
+	redis.Set(cacheName+":"+cacheKey, toJSON(value), ttl)
 }
 
 func DeleteCache(cacheName, cacheKey string) {
-	config.Redis.Del(cacheName + ":" + cacheKey)
+	redis,err := mgconfig.GetRedisConnection()
+	if err != nil {
+		return
+	}
+	redis.Del(cacheName + ":" + cacheKey)
 }
 
 func GetCache(cacheName, cacheKey string, result interface{}) {
-	r := config.Redis.Get(cacheName + ":" + cacheKey).Val()
+	redis,err := mgconfig.GetRedisConnection()
+	if err != nil {
+		return
+	}
+	r := redis.Get(cacheName + ":" + cacheKey).Val()
 	fromJSON(r, &result)
 }
 
 func ClearCache(cacheName string) {
-	keys := config.Redis.Keys(cacheName + ":*").Val()
+	redis,err := mgconfig.GetRedisConnection()
+	if err != nil {
+		return
+	}
+	keys := redis.Keys(cacheName + ":*").Val()
 	if keys != nil && len(keys) > 0 {
-		config.Redis.Del(keys...)
+		redis.Del(keys...)
 	}
 }
 
 func ExistsCache(cacheName, cacheKey string) bool {
-	exists, _ := config.Redis.Exists(cacheName + ":" + cacheKey).Result()
+	redis,err := mgconfig.GetRedisConnection()
+	if err != nil {
+		return false
+	}
+	exists, _ := redis.Exists(cacheName + ":" + cacheKey).Result()
 	return exists == 1
 }
 
