@@ -3,6 +3,7 @@ module github.com/maczh/mgcache
 go 1.17
 
 require (
+	github.com/huandu/go-clone v1.4.1
 	github.com/json-iterator/go v1.1.12
 	github.com/maczh/mgconfig v1.1.0
 	github.com/muesli/cache2go v0.0.0-20211005105910-8e46465cca4a

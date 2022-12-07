@@ -1,6 +1,7 @@
 package mgcache
 
 import (
+	"github.com/huandu/go-clone"
 	"github.com/muesli/cache2go"
 	"time"
 )
@@ -14,18 +15,12 @@ type MyCache struct {
 	cache *cache2go.CacheTable
 }
 
-var mc *MyCache
-
 /*
 	初始化一个cache
 	cachename 缓存名字
 */
 func OnGetCache(cachename string) *MyCache {
-	if mc == nil {
-		mc = new(MyCache)
-	}
-	mc.cache = cache2go.Cache(cachename)
-	return mc
+	return &MyCache{cache: cache2go.Cache(cachename)}
 }
 
 /*
@@ -33,7 +28,7 @@ func OnGetCache(cachename string) *MyCache {
 	lifeSpan:缓存时间，0表示永不超时
 */
 func (mc *MyCache) Add(key interface{}, value interface{}, lifeSpan time.Duration) *cache2go.CacheItem {
-	return mc.cache.Add(key, lifeSpan, value)
+	return mc.cache.Add(key, lifeSpan, clone.Clone(value))
 }
 
 /*
@@ -45,7 +40,7 @@ func (mc *MyCache) Value(key interface{}) (value interface{}, b bool) {
 	b = false
 	res, err := mc.cache.Value(key)
 	if err == nil {
-		value = res.Data()
+		value = clone.Clone(res.Data())
 		b = true
 		return
 	}
